@@ -1,0 +1,17 @@
+[
+  {
+  "species": "cat",
+  "name": "ronald", 
+  "breed": "calico"
+},
+{
+  "species": "fish",
+  "name": "junior", 
+  "breed": "beta"
+},
+{
+  "species": "dog",
+  "name": "Maple", 
+  "breed": "doodle"
+}
+]
