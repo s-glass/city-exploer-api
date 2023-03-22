@@ -58,6 +58,8 @@ app.get('/weather', (request, response, next) => {
     // let foundSpecies = data.find(pet => pet.species === queriedSpecies);
     let dataToGroom = data.find(e => e.city_name === queriedCity);
 
+    //let city = weather.find city => city.city_name.toLowerCase() === cityName.toLowerCase());
+
     // let dataToGroom = new City(dataToGroom);
     let mapData = dataToGroom.data.map((cityForecast) => {
       return new Forecast (cityForecast);
