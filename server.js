@@ -1,6 +1,6 @@
 'use strict';
 
-console.log('Yay, first server :) ');
+console.log('Yay, first server ');
 
 // Requires at the top of the page, like import but backend
 
@@ -8,7 +8,7 @@ const express = require('express');
 require('dotenv').config();
 const cors = require('cors');
 
-let data = requires('./data/data.json');
+let data = require('./data/weather.json');
 
 
 // app will represent your server, bring in and then call express to create the server
@@ -44,31 +44,40 @@ app.get('/hello', (request, response) => {
   let userLastName = request.query.lastName;
 
   response.status(200).send(`Hello ${userFirstName} ${userLastName}! Welcome to Sarah's server!`);
-  
+
 });
 
 // use express' middleware at the end
 
-app.get('/pet', (request, response, next) => {
+app.get('/weather', (request, response, next) => {
   try {
-    let queriedSpecies = request.query.species;
+    let queriedCity = request.query.city;
+    // let queriedLon = request.query.lon;
+    // let queriedLat = request.query.lat;
 
     // let foundSpecies = data.find(pet => pet.species === queriedSpecies);
-    let dataToGroom= data.find(pet => pet.species === queriedSpecies);
-    let dataToGroom = new Pet(dataToGroom);
+    let dataToGroom = data.find(e => e.city_name === queriedCity);
+
+    // let dataToGroom = new City(dataToGroom);
+    let mapData = dataToGroom.data.map((cityForecast) => {
+      return new Forecast (cityForecast);
+    });
 
     // response.status(200).send(`Here's the found species: ${foundSpecies}`);
-    response.status(200).send(dataToSend);
+    response.status(200).send(mapData);
   } catch (error) {
     next(error);
   }
 });
 
 // class to groom the bulky data, class takes in object, grooms it down and pulls in the two things you need, in this case name and breed
-class Pet{
-  constructor(petObj){
-    this.name = petObj.name;
-    this.breed = petObj.breed;
+class Forecast{
+  constructor(weatherObj){
+    this.name = weatherObj.name;
+    this.lon = weatherObj.lon;
+    this.lat = weatherObj.lat;
+    this.date = weatherObj.valid_date;
+    this.description = weatherObj.weather.description;
   }
 }
 
