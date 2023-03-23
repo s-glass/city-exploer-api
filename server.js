@@ -9,6 +9,7 @@ const axios = require('axios');
 
 // let data = require('./data/weather.json');
 
+
 // app will represent your server, bring in and then call express to create the server
 const app = express();
 
@@ -32,36 +33,38 @@ app.listen(PORT, () => console.log(`we are running on port ${PORT}`));
 // callback takes in two parameters, request and reqponse - end point listens for request and sends back a response
 // order matters - the wildcard serving as catch all is at the bottom and is the last point you define
 
-app.get('/', (request, response) => {
-  response.status(200).send('Welcome to my server!');
-});
+// app.get('/', (request, response) => {
+//   response.status(200).send('Welcome to my server!');
+// });
 
-app.get('/hello', (request, response) => {
-  console.log(request.query);
-  let userFirstName = request.query.firstName;
-  let userLastName = request.query.lastName;
+// app.get('/hello', (request, response) => {
+//   console.log(request.query);
+//   let userFirstName = request.query.firstName;
+//   let userLastName = request.query.lastName;
 
-  response.status(200).send(`Hello ${userFirstName} ${userLastName}! Welcome to Sarah's server!`);
+//   response.status(200).send(`Hello ${userFirstName} ${userLastName}! Welcome to Sarah's server!`);
 
-});
+// });
 
 
 
 
 app.get('/weather', async (request, response, next) => {
-
   try {
-    // let queriedCity = request.query.city;
-    let lon = request.query.lon;
-    let lat = request.query.lat;
+    let queriedCity = request.query.city;
+    let queriedLon = request.query.lon;
+    let queriedLat = request.query.lat;
 
-    let url = `https://api.weatherbit.io/v2.0/forecast/daily?key=${process.env.WEATHER_API_KEY}&lat=${lat}&lon=${lon}&days=5&units=I`;
-    console.log(url);
+    let url = `http://api.weatherbit.io/v2.0/forecast/daily?key=${process.env.WEATHER_API_KEY}&lat=${queriedLat}&lon=${queriedLon}&days=5&units=I`;
 
     let weatherResults = await axios.get(url);
 
-    let forecastToSend = weatherResults.data.data.map(cityForecast => {
-      return new Forecast(cityForecast);
+    // let foundSpecies = data.find(pet => pet.species === queriedSpecies);
+    // let dataToGroom = data.find(e => e.city_name === queriedCity);
+
+    // let dataToGroom = new City(dataToGroom);
+    let mapData = weatherResults.data.data.map((cityForecast) => {
+      return new Forecast (cityForecast);
     });
 
     response.status(200).send(forecastToSend);
@@ -75,20 +78,24 @@ app.get('/weather', async (request, response, next) => {
 
 app.get('/movies', async (request, response, next) => {
   try {
+    let cityFromFrontEnd = request.query.city_name;
 
-    let keywordFromFrontEnd = request.query.searchQuery;
-
-    let url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&query=${keywordFromFrontEnd}`;
+    let url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&language=en-US&page=1&include_adult=false&query=${cityFromFrontEnd}`;
 
     let movieResults = await axios.get(url);
 
-    let moviesToSend = movieResults.data.results.map(movie => new Movie(movie));
+    let moviesToSend = movieResults.data.results.map((movie) => {
+
+      return new Movie (movie);
+    });
+
 
     response.status(200).send(moviesToSend);
   } catch (error) {
     next(error);
   }
 });
+
 
 
 // class to groom the bulky data, class takes in object, grooms it down and pulls in the two things you need, in this case name and breed
@@ -108,6 +115,14 @@ class Movie {
     this.title = movieObj.original_title;
     this.overview = movieObj.overview;
     this.image = `https://image.tmdb.org/t/p/q500${movieObj.poster_path}`;
+  }
+}
+
+class Movie{
+  constructor(movieObj){
+    this.title = movieObj.original_title;
+    this.overview = movieObj.overview;
+    this.image = `https://image.tmdb.org/t/p/w500${movieObj.poster_path}`;
   }
 }
 
