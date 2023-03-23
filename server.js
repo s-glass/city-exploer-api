@@ -1,9 +1,7 @@
 'use strict';
-
 console.log('Yay, first server ');
 
 // Requires at the top of the page, like import but backend
-
 const express = require('express');
 require('dotenv').config();
 const cors = require('cors');
@@ -23,7 +21,7 @@ const PORT = process.env.PORT || 3002;
 
 //method listen (comes with express), 2 arguments, calls server and says listen on this port
 
-app.listen(PORT, ()=> console.log(`we are running on port ${PORT}`));
+app.listen(PORT, () => console.log(`we are running on port ${PORT}`));
 
 // add nodemon so it will auto render when you make changes to your server and don't have to close and open over and over
 
@@ -49,7 +47,7 @@ app.listen(PORT, ()=> console.log(`we are running on port ${PORT}`));
 // });
 
 
-// use express' middleware at the end
+
 
 app.get('/weather', async (request, response, next) => {
   try {
@@ -69,12 +67,12 @@ app.get('/weather', async (request, response, next) => {
       return new Forecast (cityForecast);
     });
 
-    // response.status(200).send(`Here's the found species: ${foundSpecies}`);
-    response.status(200).send(mapData);
+    response.status(200).send(forecastToSend);
   } catch (error) {
     next(error);
   }
 });
+
 
 
 
@@ -91,6 +89,7 @@ app.get('/movies', async (request, response, next) => {
       return new Movie (movie);
     });
 
+
     response.status(200).send(moviesToSend);
   } catch (error) {
     next(error);
@@ -99,11 +98,10 @@ app.get('/movies', async (request, response, next) => {
 
 
 
-
-
 // class to groom the bulky data, class takes in object, grooms it down and pulls in the two things you need, in this case name and breed
-class Forecast{
-  constructor(weatherObj){
+
+class Forecast {
+  constructor(weatherObj) {
     this.name = weatherObj.name;
     this.lon = weatherObj.lon;
     this.lat = weatherObj.lat;
@@ -112,6 +110,13 @@ class Forecast{
   }
 }
 
+class Movie {
+  constructor(movieObj) {
+    this.title = movieObj.original_title;
+    this.overview = movieObj.overview;
+    this.image = `https://image.tmdb.org/t/p/q500${movieObj.poster_path}`;
+  }
+}
 
 class Movie{
   constructor(movieObj){
@@ -131,5 +136,6 @@ app.get('*', (request, response) => {
 
 // **** ERROR HANDLING - PLUG AND PLAY CODE FROM EXPRESS DOCS use = middleware****
 app.use((error, request, response, next) => {
+  console.log('hey it did not work');
   response.status(500).send(error.message);
 });
