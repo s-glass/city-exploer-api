@@ -1,15 +1,13 @@
 'use strict';
-
 console.log('Yay, first server ');
 
 // Requires at the top of the page, like import but backend
-
 const express = require('express');
 require('dotenv').config();
 const cors = require('cors');
+const axios = require('axios');
 
-let data = require('./data/weather.json');
-
+// let data = require('./data/weather.json');
 
 // app will represent your server, bring in and then call express to create the server
 const app = express();
@@ -22,7 +20,7 @@ const PORT = process.env.PORT || 3002;
 
 //method listen (comes with express), 2 arguments, calls server and says listen on this port
 
-app.listen(PORT, ()=> console.log(`we are running on port ${PORT}`));
+app.listen(PORT, () => console.log(`we are running on port ${PORT}`));
 
 // add nodemon so it will auto render when you make changes to your server and don't have to close and open over and over
 
@@ -47,32 +45,56 @@ app.get('/hello', (request, response) => {
 
 });
 
-// use express' middleware at the end
 
-app.get('/weather', (request, response, next) => {
+
+
+app.get('/weather', async (request, response, next) => {
+
   try {
-    let queriedCity = request.query.city;
-    // let queriedLon = request.query.lon;
-    // let queriedLat = request.query.lat;
+    // let queriedCity = request.query.city;
+    let lon = request.query.lon;
+    let lat = request.query.lat;
 
-    // let foundSpecies = data.find(pet => pet.species === queriedSpecies);
-    let dataToGroom = data.find(e => e.city_name === queriedCity);
+    let url = `https://api.weatherbit.io/v2.0/forecast/daily?key=${process.env.WEATHER_API_KEY}&lat=${lat}&lon=${lon}&days=5&units=I`;
+    console.log(url);
 
-    // let dataToGroom = new City(dataToGroom);
-    let mapData = dataToGroom.data.map((cityForecast) => {
-      return new Forecast (cityForecast);
+    let weatherResults = await axios.get(url);
+
+    let forecastToSend = weatherResults.data.data.map(cityForecast => {
+      return new Forecast(cityForecast);
     });
 
-    // response.status(200).send(`Here's the found species: ${foundSpecies}`);
-    response.status(200).send(mapData);
+    response.status(200).send(forecastToSend);
   } catch (error) {
     next(error);
   }
 });
 
+
+
+
+app.get('/movies', async (request, response, next) => {
+  try {
+
+    let keywordFromFrontEnd = request.query.searchQuery;
+
+    let url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&query=${keywordFromFrontEnd}`;
+
+    let movieResults = await axios.get(url);
+
+    let moviesToSend = movieResults.data.results.map(movie => new Movie(movie));
+
+    response.status(200).send(moviesToSend);
+  } catch (error) {
+    next(error);
+  }
+});
+
+
 // class to groom the bulky data, class takes in object, grooms it down and pulls in the two things you need, in this case name and breed
-class Forecast{
-  constructor(weatherObj){
+
+class Forecast {
+  constructor(weatherObj) {
     this.name = weatherObj.name;
     this.lon = weatherObj.lon;
     this.lat = weatherObj.lat;
@@ -81,6 +103,13 @@ class Forecast{
   }
 }
 
+class Movie {
+  constructor(movieObj) {
+    this.title = movieObj.original_title;
+    this.overview = movieObj.overview;
+    this.image = `https://image.tmdb.org/t/p/q500${movieObj.poster_path}`;
+  }
+}
 
 
 // catch all - at the bottom and serves as a 404 error message
@@ -92,5 +121,6 @@ app.get('*', (request, response) => {
 
 // **** ERROR HANDLING - PLUG AND PLAY CODE FROM EXPRESS DOCS use = middleware****
 app.use((error, request, response, next) => {
+  console.log('hey it did not work');
   response.status(500).send(error.message);
 });
