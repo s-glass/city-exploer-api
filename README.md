@@ -1,7 +1,7 @@
 # city-exploer-api
 
 **Author**: Sarah Glass
-**Version**: 3.0.0 (increment the patch/fix version number if you make more commits past your first submission)
+**Version**: 4.0.0 (increment the patch/fix version number if you make more commits past your first submission)
 
 ## Overview
 Build a JavaScript applicaiton that will function as the backend to the city-explorer project. This backend app will use Cors and Express as middlewear; dotenv, and nodemon, and will be published with Render. The backend app will connect the front end to a second and third, third-party API in which user-initiated requests will return weather and movie data for a given City.
@@ -30,7 +30,9 @@ Build a JavaScript applicaiton that will function as the backend to the city-exp
 
 ## Change Log
 03/21/2023 9:40pm - Application accesses daily weather info for three cities: Seattle, Paris, Amman.
-3/22/2023 856pm - Application accesses weather and location information; still needs to pull movie data.
+3/22/2023 8:56pm - Application accesses weather and location information; still needs to pull movie data.
+3/23/2023 4:57pm - Application can send and recieve weather, location, and movie data to the front-end.
+3/23/2023 6:06pm - Application has been refactored with movies.js and weather.js files added.
 
 
 ## Time Estimates
@@ -55,7 +57,11 @@ Start time: 4:25pm
 
 Finish time: 8.57pm
 
-Actual time needed to complete: 4.5 hours
+Start time: 3:30pm next day
+
+Finish Time: 4:15pm
+
+Actual time needed to complete: 4.5 hours +45min = 5 hours, 15 minutes
 
 ## Credit and Collaborations
-Teacher Audrey and TAs Justin, Raul, and Matt
+Teacher Audrey and TAs Justin, Raul, Brandon, and Matt
