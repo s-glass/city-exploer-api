@@ -16,8 +16,7 @@ Build a JavaScript applicaiton that will function as the backend to the city-exp
 - Create another endpoint to hit movie API
 - Retrieve API data with Axios
 
-![WRRC - front to backend](/WRRC2.png)
-![WRRC - server to APIs](/WRRC3.png)
+![WRRC - finished](/WRRC%20cache.png)
 
 ## Architecture
 - JavaScript
@@ -33,7 +32,7 @@ Build a JavaScript applicaiton that will function as the backend to the city-exp
 3/22/2023 8:56pm - Application accesses weather and location information; still needs to pull movie data.
 3/23/2023 4:57pm - Application can send and recieve weather, location, and movie data to the front-end.
 3/23/2023 6:06pm - Application has been refactored with movies.js and weather.js files added.
-
+3/26/2023 9:32pm - Application has cached storage for movies and weather.
 
 ## Time Estimates
 
@@ -62,6 +61,18 @@ Start time: 3:30pm next day
 Finish Time: 4:15pm
 
 Actual time needed to complete: 4.5 hours +45min = 5 hours, 15 minutes
+
+-----------------------------
+
+Name of feature: #3 Add ability to cache data
+
+Estimate of time needed to complete: 30 minutes
+
+Start time: 8:30pm
+
+Finish time: 9:06pm
+
+Actual time needed to complete: 36 minutes
 
 ## Credit and Collaborations
 Teacher Audrey and TAs Justin, Raul, Brandon, and Matt
