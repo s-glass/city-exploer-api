@@ -14,34 +14,34 @@ async function getMovies(request, response, next) {
 
     let key = `${keywordFromFrontEnd}- Movie`;
 
-    if (cache[key] && (Date.now() - cache[key].timestamp) < 8.64e+7)
+    if (cache[key] && (Date.now() - cache[key].timestamp) < 8.64e+7) {
       console.log('Movie cache was hit', cache);
 
       response.status(200).send(cache[key].data);
 
-  } else {
-    console.log('No items in movie cache');
+    } else {
+      console.log('No items in movie cache');
 
-    let url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&query=${keywordFromFrontEnd}`;
+      let url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&query=${keywordFromFrontEnd}`;
 
-    let movieResults = await axios.get(url);
+      let movieResults = await axios.get(url);
 
-    let moviesToSend = movieResults.data.results.map(movie => new Movie(movie));
-
-
-  // Build it into cache
-  cache[key] = {
-    data: moviesToSend,
-    timestamp: Date.now()
-  }
+      let moviesToSend = movieResults.data.results.map(movie => new Movie(movie));
 
 
-  response.status(200).send(moviesToSend);
-};
+      // Build it into cache
+      cache[key] = {
+        data: moviesToSend,
+        timestamp: Date.now()
+      }
+
+
+      response.status(200).send(moviesToSend);
+    };
 
   } catch (error) {
-  next(error);
-}
+    next(error);
+  }
 }
 
 class Movie {
